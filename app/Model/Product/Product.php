@@ -19,5 +19,8 @@ class Product extends Model
         'berat_pengiriman',
         'stock',
         'like',
+        'type',
+        'status_ongkir',
+        'casback',
     ];
 }

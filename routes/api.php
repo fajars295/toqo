@@ -78,7 +78,14 @@ Route::group([
     Route::post('create', 'Api\Product\ProductController@store');
     Route::get('list', 'Api\Product\ProductController@GetProduct');
     Route::get('list-category/{code}', 'Api\Product\ProductController@ProductCatagory');
-    Route::get('list-type-category/{code}', 'Api\Product\ProductController@ProductCatagory');
+    Route::get('list-type-category/{code}', 'Api\Product\ProductController@ProductTypeCatagory');
+    Route::get('Product-Promo-Or-Diskon', 'Api\Product\ProductController@ProductPromoOrDiskon');
+    Route::get('Product-Casback', 'Api\Product\ProductController@ProductCasback');
+    Route::get('Product-Gratis-Ongkir', 'Api\Product\ProductController@ProductGratisOnkir');
+    Route::get('Product-COD', 'Api\Product\ProductController@ProductCOD');
+    Route::get('Product-Brand-Baru', 'Api\Product\ProductController@ProductBrandBaru');
+
+
     Route::get('list-populer', 'Api\Product\ProductController@ProductPopuler');
     Route::get('list-terlaris', 'Api\Product\ProductController@ProductTerlaris');
     Route::post('update', 'Api\Product\ProductController@updatedata');

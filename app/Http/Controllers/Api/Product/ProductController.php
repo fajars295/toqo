@@ -56,6 +56,9 @@ class ProductController extends Controller
             'type_spesifikasi_id' => 'required',
             'deskripsi_spesifikasi' => 'required',
             'stock' => 'required',
+            'type' => 'required',
+            'status_ongkir' => 'required',
+            'casback' => 'required',
         ]);
         if ($validator->fails()) {
             return ResponeHelper::ResponValidator($validator);
@@ -74,6 +77,7 @@ class ProductController extends Controller
         $cre = $request->all();
         $cre['users_id'] = Auth::user()->id;
         $cre['like'] = 0;
+        $cre['total_pembelian'] = 0;
 
         DB::beginTransaction();
         try {
@@ -364,18 +368,289 @@ class ProductController extends Controller
     public function ProductCatagory(Request $request, $id)
     {
         # code...
-        $product = $this->model->where('name', 'like', "%" . $request->name . "%")
-            ->where('categories_id', $id)
-            ->orderBy('id', 'desc')->get();
+
+
+        switch ($request->type) {
+
+            case 'terkait':
+                # code...
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    // ->where('categories_id', $id)
+                    ->orderBy('id', 'desc')->get();
+                break;
+            case 'terbaru':
+                # code...
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('categories_id', $id)
+                    ->orderBy('id', 'desc')->get();
+                break;
+            case 'terlaris';
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('categories_id', $id)
+                    ->orderBy('total_pembelian', 'desc')
+                    ->get();
+                break;
+            case 'termurah';
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('categories_id', $id)
+                    ->orderBy('harga', 'asc')
+                    ->get();
+                break;
+
+            default:
+                # code...
+                return ResponeHelper::GetDataBerhasil(null);
+                break;
+        }
 
         return ResponeHelper::GetDataBerhasil(ProductResource::collection(collect($product)));
     }
     public function ProductTypeCatagory(Request $request, $id)
     {
         # code...
-        $product = $this->model->where('name', 'like', "%" . $request->name . "%")
-            ->where('type_categories_id', $id)
-            ->orderBy('id', 'desc')->get();
+        // dd('masuk');
+        switch ($request->type) {
+
+            case 'terkait':
+                # code...
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('type_categories_id', $id)
+                    // ->orderBy('id', 'desc')
+                    ->get();
+                break;
+            case 'terbaru':
+                # code...
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('type_categories_id', $id)
+                    ->orderBy('id', 'desc')
+                    ->get();
+                break;
+            case 'terlaris';
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('type_categories_id', $id)
+                    ->orderBy('total_pembelian', 'desc')
+                    ->get();
+                break;
+            case 'termurah';
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('type_categories_id', $id)
+                    ->orderBy('harga', 'asc')
+                    ->get();
+                break;
+
+            default:
+                # code...
+                return ResponeHelper::GetDataBerhasil(null);
+                break;
+        }
+
+
+        return ResponeHelper::GetDataBerhasil(ProductResource::collection(collect($product)));
+    }
+
+    public function ProductPromoOrDiskon(Request $request)
+    {
+        # code...
+        // dd('masuk');
+        switch ($request->type) {
+
+            case 'terkait':
+                # code...
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('diskon', '!=', 0)
+                    // ->orderBy('id', 'desc')
+                    ->get();
+                break;
+            case 'terbaru':
+                # code...
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('diskon', '!=', 0)
+                    ->orderBy('id', 'desc')
+                    ->get();
+                break;
+            case 'terlaris';
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('diskon', '!=', 0)
+                    ->orderBy('total_pembelian', 'desc')
+                    ->get();
+                break;
+            case 'termurah';
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('diskon', '!=', 0)
+                    ->orderBy('harga', 'asc')
+                    ->get();
+                break;
+
+            default:
+                # code...
+                return ResponeHelper::GetDataBerhasil(null);
+                break;
+        }
+
+
+        return ResponeHelper::GetDataBerhasil(ProductResource::collection(collect($product)));
+    }
+    public function ProductCasback(Request $request)
+    {
+        # code...
+        // dd('masuk');
+        switch ($request->type) {
+
+            case 'terkait':
+                # code...
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('casback', '!=', 0)
+                    // ->orderBy('id', 'desc')
+                    ->get();
+                break;
+            case 'terbaru':
+                # code...
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('casback', '!=', 0)
+                    ->orderBy('id', 'desc')
+                    ->get();
+                break;
+            case 'terlaris';
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('casback', '!=', 0)
+                    ->orderBy('total_pembelian', 'desc')
+                    ->get();
+                break;
+            case 'termurah';
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('casback', '!=', 0)
+                    ->orderBy('harga', 'asc')
+                    ->get();
+                break;
+
+            default:
+                # code...
+                return ResponeHelper::GetDataBerhasil(null);
+                break;
+        }
+
+
+        return ResponeHelper::GetDataBerhasil(ProductResource::collection(collect($product)));
+    }
+    public function ProductGratisOnkir(Request $request)
+    {
+        # code...
+        // dd('masuk');
+        switch ($request->type) {
+
+            case 'terkait':
+                # code...
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('status_ongkir', 1)
+                    // ->orderBy('id', 'desc')
+                    ->get();
+                break;
+            case 'terbaru':
+                # code...
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('status_ongkir', 1)
+                    ->orderBy('id', 'desc')
+                    ->get();
+                break;
+            case 'terlaris';
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('status_ongkir', 1)
+                    ->orderBy('total_pembelian', 'desc')
+                    ->get();
+                break;
+            case 'termurah';
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('status_ongkir', 1)
+                    ->orderBy('harga', 'asc')
+                    ->get();
+                break;
+
+            default:
+                # code...
+                return ResponeHelper::GetDataBerhasil(null);
+                break;
+        }
+
+
+        return ResponeHelper::GetDataBerhasil(ProductResource::collection(collect($product)));
+    }
+    public function ProductCOD(Request $request)
+    {
+        # code...
+        // dd('masuk');
+        switch ($request->type) {
+
+            case 'terkait':
+                # code...
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('type', 'Cod')
+                    // ->orderBy('id', 'desc')
+                    ->get();
+                break;
+            case 'terbaru':
+                # code...
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('type', 'Cod')
+                    ->orderBy('id', 'desc')
+                    ->get();
+                break;
+            case 'terlaris';
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('type', 'Cod')
+                    ->orderBy('total_pembelian', 'desc')
+                    ->get();
+                break;
+            case 'termurah';
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->where('type', 'Cod')
+                    ->orderBy('harga', 'asc')
+                    ->get();
+                break;
+
+            default:
+                # code...
+                return ResponeHelper::GetDataBerhasil(null);
+                break;
+        }
+
+
+        return ResponeHelper::GetDataBerhasil(ProductResource::collection(collect($product)));
+    }
+    public function ProductBrandBaru(Request $request)
+    {
+        # code...
+        // dd('masuk');
+        switch ($request->type) {
+
+            case 'terkait':
+                # code...
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    // ->orderBy('id', 'desc')
+                    ->get();
+                break;
+            case 'terbaru':
+                # code...
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->orderBy('id', 'desc')
+                    ->get();
+                break;
+            case 'terlaris';
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->orderBy('total_pembelian', 'desc')
+                    ->get();
+                break;
+            case 'termurah';
+                $product = $this->model->where('name', 'like', "%" . $request->name . "%")
+                    ->orderBy('harga', 'asc')
+                    ->get();
+                break;
+
+            default:
+                # code...
+                return ResponeHelper::GetDataBerhasil(null);
+                break;
+        }
+
 
         return ResponeHelper::GetDataBerhasil(ProductResource::collection(collect($product)));
     }
