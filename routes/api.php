@@ -60,6 +60,7 @@ Route::group([
     Route::post('create', 'Api\Product\CategoryController@store');
     Route::post('update', 'Api\Product\CategoryController@Updatedata');
     Route::get('list', 'Api\Product\CategoryController@List');
+    Route::get('list-by-Type-Category/{code}', 'Api\Product\CategoryController@ListTypeCategory');
     Route::get('delete/{code}', 'Api\Product\CategoryController@Destroy');
 });
 Route::group([

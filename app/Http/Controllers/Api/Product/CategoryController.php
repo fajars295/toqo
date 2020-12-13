@@ -78,6 +78,13 @@ class CategoryController extends Controller
         return ResponeHelper::GetDataBerhasil(CategoryResource::collection(collect($cek)));
     }
 
+    public function ListTypeCategory($id)
+    {
+        # code...
+        $cek = $this->model->where('type_categories_id', $id)->get();
+        return ResponeHelper::GetDataBerhasil(CategoryResource::collection(collect($cek)));
+    }
+
     public function Destroy($id)
     {
         # code...
