@@ -10,5 +10,6 @@ class AddCard extends Model
     protected $fillable = [
         'products_id',
         'users_id',
+        'penjual_id'
     ];
 }

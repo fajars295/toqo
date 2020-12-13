@@ -21,6 +21,7 @@ class ProductResource extends JsonResource
      */
     public function toArray($request)
     {
+        // dd($this->diskon);
         if ($this->diskon == 0) {
             $harga = $this->harga;
         } else {
