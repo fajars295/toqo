@@ -33,6 +33,7 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'deskripsi' => $this->deskripsi,
             'harga' => $harga,
+            'harga_sebelum' => $this->harga,
             'diskon' => $this->diskon . '%',
             'stock' => $this->stock,
             'categories_id' => Category::find($this->categories_id)->name,
