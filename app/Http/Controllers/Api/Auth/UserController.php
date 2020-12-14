@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\ResponeHelper;
+use App\Http\Resources\UserResource;
 use App\Model\User\Profile;
 use App\User;
 use Carbon\Carbon;
@@ -37,10 +38,12 @@ class UserController extends Controller
         if ($validator->fails()) {
             return ResponeHelper::ResponValidator($validator);
         }
+        $arr = explode(' ', $request->name);
         $user = new User([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            'users_code' => $arr[0] . rand(1, 9000000)
         ]);
         $user->save();
         return ResponeHelper::CreteorUpdateBerhasil($user, 'Berhasil Create');
@@ -152,6 +155,6 @@ class UserController extends Controller
     public function GetProfile()
     {
         # code...
-        return ResponeHelper::GetDataBerhasil(Auth::user());
+        return ResponeHelper::GetDataBerhasil(new UserResource(Auth::user()));
     }
 }

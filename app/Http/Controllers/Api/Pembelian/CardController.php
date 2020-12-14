@@ -8,6 +8,7 @@ use App\Http\Resources\CardResource;
 use App\Http\Resources\ProductResource;
 use App\Model\Pembelian\AddCard;
 use App\Model\Product\Product;
+use App\Model\User\Profile;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -69,10 +70,13 @@ class CardController extends Controller
                 array_push($has, new ProductResource(Product::find($d->products_id)));
             }
 
+            $profile = Profile::where('users_id', $penjual)->first();
+
             $d = [
                 'id' => $id,
                 'penjual_id' => User::find($penjual)->id,
                 'penjual' => User::find($penjual)->name,
+                'foto' => $profile == null ? url('logo/account.jpg') : url($profile->foto),
                 'product' => $has
             ];
 

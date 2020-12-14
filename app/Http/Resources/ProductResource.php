@@ -40,7 +40,7 @@ class ProductResource extends JsonResource
             'categories_id' => Category::find($this->categories_id)->name,
             'type_categories_id' => TypeCategory::find($this->type_categories_id)->name,
             'total_pembelian' => $this->total_pembelian,
-            'users' => User::find($this->users_id),
+            'users' => new UserResource(User::find($this->users_id)),
             'berat_pengiriman' => $this->berat_pengiriman,
             'gratis_ongkir' => $this->status_ongkir == 1 ? true : false,
             'casback' => $this->casback,
