@@ -134,8 +134,8 @@ class UserController extends Controller
             return ResponeHelper::ResponValidator($validator);
         }
 
-        $cekprofile = Profile::where('users_id', Auth::user()->id)->first()->foto;
-        if ($cekprofile != null) {
+        $cekprofile = Profile::where('users_id', Auth::user()->id)->first();
+        if ($cekprofile) {
             File::delete(public_path() . $cekprofile);
         }
         $upload = ResponeHelper::uploadImg($request->foto, 'Profile');
