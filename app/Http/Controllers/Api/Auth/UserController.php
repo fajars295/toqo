@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\ResponeHelper;
 use App\Http\Resources\UserResource;
+use App\Model\Profile\TokoDetail;
 use App\Model\User\Profile;
 use App\User;
 use Carbon\Carbon;
@@ -97,13 +98,33 @@ class UserController extends Controller
     public function UpdateProfile(Request $request)
     {
         # code...
-        $validator = Validator::make($request->all(), [
-            // 'users_id'  => 'required|string',
-            'nomor_hp'  => 'required|string',
-            'jenis_kelamin'  => 'required|string',
-            'tanggal_lahir'  => 'required|string',
-            'nama_toko'  => 'required|string',
-        ]);
+
+        if ($request->type == 1) {
+
+            $validator = Validator::make($request->all(), [
+                'nomor_hp'  => 'required|string',
+                'jenis_kelamin'  => 'required|string',
+                'tanggal_lahir'  => 'required|string',
+                'nama_toko'  => 'required|string',
+            ]);
+        }
+        if ($request->type == 2) {
+
+            $validator = Validator::make($request->all(), [
+                'nomor_hp'  => 'required|string',
+                'jenis_kelamin'  => 'required|string',
+                'tanggal_lahir'  => 'required|string',
+                'nama_toko'  => 'required|string',
+                'logo' => 'required|file',
+                'foto_ktp' => 'required|file',
+                'foto_diri' => 'required|file',
+                'alamat_toko' => 'required',
+                'alamat_pemilik_toko' => 'required',
+                'nomor_toko' => 'required',
+            ]);
+        }
+
+
         if ($validator->fails()) {
             return ResponeHelper::ResponValidator($validator);
         }
@@ -118,8 +139,29 @@ class UserController extends Controller
             'nama_toko' => $request->nama_toko,
         ]);
 
+        if ($request->type == 2) {
+
+            $logo = ResponeHelper::uploadImg($request->logo, 'Toko');
+            $ktp = ResponeHelper::uploadImg($request->foto_ktp, 'KTP');
+            $foto_diri = ResponeHelper::uploadImg($request->foto_diri, 'Pemilik');
+            $cre = TokoDetail::updateOrCreate([
+                'users_id' => Auth::user()->id
+            ], [
+                'users_id' => Auth::user()->id,
+                'logo' => $logo,
+                'foto_ktp' => $ktp,
+                'foto_diri' => $foto_diri,
+                'alamat_toko' => $request->alamat_toko,
+                'alamat_pemilik_toko' => $request->alamat_pemilik_toko,
+                'nomor_toko' => $request->nomor_toko,
+            ]);
+        }
+
+
+
+
         if ($cre) {
-            return ResponeHelper::CreteorUpdateBerhasil(null, 'Beerhasil Update Profile');
+            return ResponeHelper::CreteorUpdateBerhasil(null, 'Berhasil Update Profile');
         }
         return ResponeHelper::badRequest('gagal');
     }
