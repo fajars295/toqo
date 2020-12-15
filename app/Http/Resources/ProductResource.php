@@ -48,7 +48,7 @@ class ProductResource extends JsonResource
             'foto' => ProductFotoResource::collection(collect(ProductFoto::where('products_id', $this->id)->get())),
             'spesifikasi' => ProductSpesifikasi::where('products_id', $this->id)->get(),
             'like' => $like->first() == null ? false : true,
-            'jumlah_like' => $like->count(),
+            'jumlah_like' => LikeProduct::where('users_id', Auth::user()->id)->where('products_id', $this->id)->count(),
         ];
     }
 }
