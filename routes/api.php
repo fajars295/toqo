@@ -141,3 +141,18 @@ Route::group([
     Route::get('list-Info-Category/{code}', 'Api\Info\InfoController@GetInfoCategory');
     Route::get('delete/{code}', 'Api\Info\InfoController@Destroy');
 });
+
+Route::group([
+    'prefix' => 'Content',
+    'middleware' => 'auth:api'
+], function () {
+    Route::post('create', 'Api\Content\ContentController@store');
+    Route::post('update', 'Api\Content\ContentController@Updatedata');
+    Route::get('list', 'Api\Content\ContentController@List');
+    Route::get('detail/{code}', 'Api\Content\ContentController@detail');
+    Route::get('delete/{code}', 'Api\Content\ContentController@Destroy');
+    Route::get('Like-Content/{code}', 'Api\Content\ContentController@LikeContent');
+    Route::get('Un-Like-Content/{code}', 'Api\Content\ContentController@UnLikeContent');
+    Route::post('Comment-Content', 'Api\Content\ContentController@CommentContent');
+    Route::get('Comment-delete-Content/{code}', 'Api\Content\ContentController@CommentContentDelete');
+});

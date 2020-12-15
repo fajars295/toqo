@@ -331,10 +331,10 @@ class ProductController extends Controller
             $cre['users_id'] = Auth::user()->id;
             $cre['products_id'] = $id;
             $input = $this->modelLikeProduct->create($cre);
-
+            $j =  $cekProduct->like + 1;
             if ($input) {
                 $cekProduct->update([
-                    'like' => $cekProduct->like + 1
+                    'like' => $j
                 ]);
             }
 
@@ -359,8 +359,9 @@ class ProductController extends Controller
             return ResponeHelper::badRequest('Anda Belum Pernah Like');
         }
         $del =  $ceklike->delete();
+        $un = $cekProduct->like - 1;
         $cekProduct->update([
-            'like' => $cekProduct->like - 1
+            'like' => $un
         ]);
         return ResponeHelper::CreteorUpdateBerhasil(null, 'Berhasil UnLike');
     }
