@@ -32,6 +32,7 @@ class UserResource extends JsonResource
                 'alamat_pemilik_toko' => $toko->alamat_pemilik_toko,
                 'nomor_toko' => $toko->nomor_toko,
                 'logo' => url($toko->logo),
+                'toko' => true,
             ];
         }
 
