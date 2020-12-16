@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CardResource;
 use App\Http\Resources\HistoryProductResource;
 use App\Http\Resources\ProductResource;
+use App\Model\Content\Notifikasi;
 use App\Model\Product\Category;
 use App\Model\Product\HistoryStock;
 use App\Model\Product\LikeProduct;
@@ -119,6 +120,16 @@ class ProductController extends Controller
                 'keterangan' => 'Create New Product',
                 'products_id' => $prod->id,
             ]);
+
+            Notifikasi::create([
+                'keterangan' => 'ada Product baru ayo kita cek ' . $request->name,
+                'type' => '1',
+                'users_id' => 0,
+                'tujuan_id' => $prod->id,
+                'status' => false,
+            ]);
+
+            ResponeHelper::fcmtoken(null, 'ada Product baru ayo kita cek', $request->name, 'all');
             DB::commit();
             return ResponeHelper::CreteorUpdateBerhasil(null, 'Berhasil Create Product');
         } catch (\Exception $th) {

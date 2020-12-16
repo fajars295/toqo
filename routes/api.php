@@ -24,6 +24,7 @@ Route::group([
 ], function () {
     Route::post('login', 'Api\Auth\UserController@Login');
     Route::post('signup', 'Api\Auth\UserController@Register');
+    Route::post('Upload-Fcm-Token', 'Api\Content\FcmTokenController@store');
 
     Route::group([
         'middleware' => 'auth:api'
@@ -32,6 +33,8 @@ Route::group([
         Route::get('GetProfile', 'Api\Auth\UserController@GetProfile');
         Route::post('Update', 'Api\Auth\UserController@UpdateProfile');
         Route::post('Update-Foto', 'Api\Auth\UserController@UpdateFoto');
+        Route::get('List-Fcm-Token', 'Api\Content\FcmTokenController@List');
+        Route::get('Delete-Fcm-Token/{delete}', 'Api\Content\FcmTokenController@Destroy');
     });
 });
 Route::group([
@@ -155,4 +158,10 @@ Route::group([
     Route::get('Un-Like-Content/{code}', 'Api\Content\ContentController@UnLikeContent');
     Route::post('Comment-Content', 'Api\Content\ContentController@CommentContent');
     Route::get('Comment-delete-Content/{code}', 'Api\Content\ContentController@CommentContentDelete');
+});
+Route::group([
+    'prefix' => 'Notifikasi',
+    'middleware' => 'auth:api'
+], function () {
+    Route::get('list', 'Api\Content\NotifikasiController@List');
 });

@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use App\Model\Content\FcmToken;
+use App\Model\Content\Notifikasi;
 use App\transfermodel;
 use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Client;
@@ -121,5 +123,52 @@ class ResponeHelper
         $file->move($path, $filename);
 
         return $imagePath . $filename;
+    }
+
+    public static function fcmtoken($email, $title, $body, $type)
+    {
+        # code...
+        // dd($header);
+
+        if ($type == 'all') {
+            $getAllToken = FcmToken::get()->map(function ($value) {
+                return $value->token;
+            })->toArray();
+        } else {
+            $getAllToken = FcmToken::where('email', $email)->get()->map(function ($value) {
+                return $value->token;
+            })->toArray();
+        }
+
+        $array = [
+            "registration_ids" => $getAllToken,
+            "notification" => [
+                "title" => $title,
+                "body" => $body
+            ]
+        ];
+        $bod = json_encode($array);
+
+        $client = new Client();
+        $url = 'https://fcm.googleapis.com/fcm/send';
+
+        try {
+            $response = $client->post($url, [
+                'http_errors' => false,
+                'body' => $bod,
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                    'Authorization' => "key=AAAAlH0fdOc:APA91bG4R08nIyGt42q0w61_kRHOUelOQH5xHHDBfUjKZ1ehYgfO9SbyST9io5aXtlm2bf7QLv0UqFLW0WuQrKdXx-Z0I9sFaAXec0AsjAloIYgs5puhhvkvc4sH-CM4sXx7DbFYFcUf"
+                ]
+
+            ]);
+        } catch (\GuzzleHttp\Exception\ClientException $exception) {
+            return false;
+        } catch (\Exception $exception) {
+            return false;
+        }
+        $respons = $response->getBody()->getContents();
+        return $respons;
     }
 }
