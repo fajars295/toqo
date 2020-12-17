@@ -12,6 +12,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
@@ -198,5 +199,55 @@ class UserController extends Controller
     {
         # code...
         return ResponeHelper::GetDataBerhasil(new UserResource(Auth::user()));
+    }
+
+    public function UpdateNew(Request $request)
+    {
+        # code...
+
+        $validator = Validator::make($request->all(), [
+            'nomor_hp'  => 'required|string',
+            'name'  => 'required|string',
+            'email'  => 'required|email',
+            'jenis_kelamin'  => 'required|string',
+            'tanggal_lahir'  => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return ResponeHelper::ResponValidator($validator);
+        }
+        $cekemail = User::where('email', $request->email)->first();
+        if ($cekemail) {
+            if ($cekemail->id != Auth::user()->id) {
+                return ResponeHelper::badRequest('email sudah di gunakan');
+            }
+        }
+
+        DB::beginTransaction();
+        try {
+            $cre = Profile::updateOrCreate([
+                'users_id' => Auth::user()->id
+            ], [
+                'users_id' => Auth::user()->id,
+                'nomor_hp' => $request->nomor_hp,
+                'jenis_kelamin' => $request->jenis_kelamin,
+                'tanggal_lahir' => $request->tanggal_lahir,
+            ]);
+
+            User::find(Auth::user()->id)->update([
+                'email' => $request->email,
+                'name' => $request->name
+            ]);
+
+            DB::commit();
+
+            return ResponeHelper::CreteorUpdateBerhasil(null, 'berhasil update');
+        } catch (\Exception $th) {
+
+            DB::rollBack();
+            return ResponeHelper::badRequest(null, 'GAGAL update ERR :' . $th);
+
+            //throw $th;
+        }
     }
 }

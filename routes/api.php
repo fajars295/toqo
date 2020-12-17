@@ -31,6 +31,7 @@ Route::group([
     ], function () {
         Route::get('logout', 'Api\Auth\UserController@logout');
         Route::get('GetProfile', 'Api\Auth\UserController@GetProfile');
+        Route::post('Update-New', 'Api\Auth\UserController@UpdateNew');
         Route::post('Update', 'Api\Auth\UserController@UpdateProfile');
         Route::post('Update-Foto', 'Api\Auth\UserController@UpdateFoto');
         Route::get('List-Fcm-Token', 'Api\Content\FcmTokenController@List');
@@ -164,4 +165,19 @@ Route::group([
     'middleware' => 'auth:api'
 ], function () {
     Route::get('list', 'Api\Content\NotifikasiController@List');
+});
+Route::group([
+    'prefix' => 'Alamat',
+    'middleware' => 'auth:api'
+], function () {
+    Route::get('provisi', 'Api\Auth\AlamatController@GetProvinsi');
+    Route::get('kabupaten/{code}', 'Api\Auth\AlamatController@GetKabupaten');
+    Route::get('kecamatan/{code}', 'Api\Auth\AlamatController@GetKecamatan');
+    Route::get('kelurahan/{code}', 'Api\Auth\AlamatController@GetKelurahan');
+
+    Route::post('create', 'Api\Auth\AlamatController@store');
+    Route::post('update', 'Api\Auth\AlamatController@Updatedata');
+    Route::get('list', 'Api\Auth\AlamatController@List');
+    Route::get('detail/{code}', 'Api\Auth\AlamatController@detail');
+    Route::get('delete/{code}', 'Api\Auth\AlamatController@Destroy');
 });
