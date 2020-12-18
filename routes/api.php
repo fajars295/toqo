@@ -181,3 +181,14 @@ Route::group([
     Route::get('detail/{code}', 'Api\Auth\AlamatController@detail');
     Route::get('delete/{code}', 'Api\Auth\AlamatController@Destroy');
 });
+
+
+Route::group([
+    'prefix' => 'Content',
+    'middleware' => 'auth:api'
+], function () {
+    Route::post('create', 'Api\Content\ContentAplikasiController@store');
+    Route::post('update', 'Api\Content\ContentAplikasiController@Updatedata');
+    Route::get('list/{code}', 'Api\Content\ContentAplikasiController@List');
+    Route::get('delete/{code}', 'Api\Content\ContentAplikasiController@Destroy');
+});
