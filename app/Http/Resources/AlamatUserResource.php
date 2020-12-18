@@ -26,6 +26,7 @@ class AlamatUserResource extends JsonResource
             'kelurahan' => DB::table('kelurahan')->find($this->kelurahan)->nama_kelurahan,
             'kode_pos' => $this->kode_pos,
             'patokan' => $this->patokan,
+            'nomor_hp' => $this->nomor_hp
         ];
     }
 }
