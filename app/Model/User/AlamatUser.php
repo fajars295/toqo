@@ -18,5 +18,6 @@ class AlamatUser extends Model
         'kode_pos',
         'patokan',
         'users_id',
+        'nomor_hp',
     ];
 }

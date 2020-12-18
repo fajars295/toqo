@@ -64,6 +64,7 @@ class AlamatController extends Controller
             'kelurahan' => 'required',
             'kode_pos' => 'required|numeric',
             'patokan' => 'required|string',
+            'nomor_hp' => 'required|string',
         ]);
         if ($validator->fails()) {
             return ResponeHelper::ResponValidator($validator);
