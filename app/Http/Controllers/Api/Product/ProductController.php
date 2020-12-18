@@ -387,7 +387,7 @@ class ProductController extends Controller
             case 'terkait':
                 # code...
                 $product = $this->model->where('name', 'like', "%" . $request->name . "%")
-                    // ->where('categories_id', $id)
+                    ->where('categories_id', $id)
                     ->orderBy('id', 'desc')->get();
                 break;
             case 'terbaru':
