@@ -64,7 +64,6 @@ class CardController extends Controller
             $id = '';
             foreach ($value as $l => $d) {
                 # code...
-
                 $id = $d->id;
                 $penjual = $d->penjual_id;
                 array_push($has, new ProductResource(Product::find($d->products_id)));

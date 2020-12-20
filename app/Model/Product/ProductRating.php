@@ -12,5 +12,6 @@ class ProductRating extends Model
         'deskripsi',
         'rating',
         'products_id',
+        'penjual_id'
     ];
 }

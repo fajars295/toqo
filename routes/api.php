@@ -36,6 +36,7 @@ Route::group([
         Route::post('Update-Foto', 'Api\Auth\UserController@UpdateFoto');
         Route::get('List-Fcm-Token', 'Api\Content\FcmTokenController@List');
         Route::get('Delete-Fcm-Token/{delete}', 'Api\Content\FcmTokenController@Destroy');
+        Route::get('ClaimLoyalty', 'Api\Auth\Loyalty@ClaimLoyalty');
     });
 });
 Route::group([
@@ -191,4 +192,30 @@ Route::group([
     Route::post('update', 'Api\Content\ContentAplikasiController@Updatedata');
     Route::get('list/{code}', 'Api\Content\ContentAplikasiController@List');
     Route::get('delete/{code}', 'Api\Content\ContentAplikasiController@Destroy');
+});
+
+Route::group([
+    'prefix' => 'Transaksi',
+    'middleware' => 'auth:api'
+], function () {
+    Route::post('query', 'Api\Pembelian\TransaksiController@QueryTransaksi');
+    Route::post('CommitTransaksi', 'Api\Pembelian\TransaksiController@CommitTransaksi');
+    Route::get('ListTransacation', 'Api\Pembelian\TransaksiController@ListTransacation');
+    Route::get('ListTransaksiDikemas', 'Api\Pembelian\TransaksiController@ListTransaksiDikemas');
+    Route::get('Update-Dikemas/{code}', 'Api\Pembelian\TransaksiController@UpdateDikemas');
+    Route::get('ListransaksiDiKirim', 'Api\Pembelian\TransaksiController@ListransaksiDiKirim');
+    Route::get('Update-Diterima/{code}', 'Api\Pembelian\TransaksiController@UpdateDiterima');
+    Route::get('ListransaksiDiTerima', 'Api\Pembelian\TransaksiController@ListransaksiDiTerima');
+    Route::post('Retting-Product', 'Api\Pembelian\TransaksiController@RettingProduct');
+
+
+    // upload bukti transaksi
+    Route::post('Upload-Bukti', 'Api\Pembelian\UploadBuktiPembeyaranController@store');
+    Route::get('List-All-Upload-Bukti', 'Api\Pembelian\UploadBuktiPembeyaranController@List');
+    Route::get('List-Invoice-Upload-Bukti/{code}', 'Api\Pembelian\UploadBuktiPembeyaranController@ListByInvoiceId');
+    Route::post('Update-Upload-Bukti', 'Api\Pembelian\UploadBuktiPembeyaranController@UpdateStatus');
+
+    // Complain
+    Route::post('Complain-Product', 'Api\Product\KompalianController@store');
+    Route::get('List-Complain', 'Api\Product\KompalianController@ListComplain');
 });

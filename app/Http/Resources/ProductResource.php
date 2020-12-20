@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Model\Product\Category;
 use App\Model\Product\LikeProduct;
 use App\Model\Product\ProductFoto;
+use App\Model\Product\ProductRating;
 use App\Model\Product\ProductSpesifikasi;
 use App\Model\Product\TypeCategory;
 use App\User;
@@ -29,6 +30,7 @@ class ProductResource extends JsonResource
             $harga = $this->harga - $bagi;
         }
         $like = LikeProduct::where('users_id', Auth::user()->id)->where('products_id', $this->id);
+        $rating = ProductRating::where('products_id', $this->id);
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -49,6 +51,7 @@ class ProductResource extends JsonResource
             'spesifikasi' => ProductSpesifikasi::where('products_id', $this->id)->get(),
             'like' => $like->first() == null ? false : true,
             'jumlah_like' => LikeProduct::where('users_id', Auth::user()->id)->where('products_id', $this->id)->count(),
+            'rating' => $rating->count() == 0 ? 0 :  $rating->get()->avg('rating'),
         ];
     }
 }
